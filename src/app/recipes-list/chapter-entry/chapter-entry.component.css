@@ -1,0 +1,9 @@
+.chapter-add {
+
+  display: inline-block;
+  overflow: hidden;
+
+  padding: 3px;
+  border-radius: 10px;
+  background-color: wheat;
+}

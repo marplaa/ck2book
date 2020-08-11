@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Rezept zum Kapitel {{data.title}} hinzufügen</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%;">
+    <mat-label>Ein Link oder eine Rezeptnummer pro Zeile</mat-label>
+    <textarea matInput  [(ngModel)]="recipesUrls"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Abbrechen</button>
+  <button mat-button [mat-dialog-close]="recipesUrls" cdkFocusInitial>Hinzufügen</button>
+</div>

@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Neues Kapitel unter {{data.title}} hinzufügen</h1>
+<div mat-dialog-content>
+
+  <mat-form-field style="width: 100%;">
+    <mat-label>Titel</mat-label>
+    <input matInput  [(ngModel)]="chapterTitle">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Abbrechen</button>
+  <button mat-button [mat-dialog-close]="chapterTitle" cdkFocusInitial>Hinzufügen</button>
+</div>

@@ -1,0 +1,87 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-12" style="margin-bottom: 20px">
+
+<!--      <mat-card>
+        <mat-card-content>
+
+          <button  mat-icon-button  (click)="saveAndExit()"><mat-icon>arrow_back</mat-icon></button>
+
+          <button class="float-right" mat-raised-button color="primary" (click)="saveAndExit()">Übernehmen</button>
+        </mat-card-content>
+      </mat-card>-->
+
+      <mat-card>
+        <mat-card-content>
+          <div class="container">
+            <div class="row">
+              <div class="col-2">
+                <button mat-icon-button  (click)="saveAndExit()"><mat-icon>arrow_back</mat-icon></button>
+              </div>
+              <div class="col-8" style="text-align: center; font-size: x-large">
+                Rezept bearbeiten
+              </div>
+              <div class="col-2">
+                <button class="float-right" mat-raised-button color="primary" (click)="saveAndExit()">Übernehmen</button>
+              </div>
+            </div>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-9">
+
+      <mat-card>
+
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="Titel" matInput [(ngModel)]="recipe.title"
+                 style="font-size: 20pt; margin-bottom: 10px">
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+        <mat-card-content>
+          <app-image-list [node]="recipe" [images]="recipe.images"></app-image-list>
+          <div style="height: 500px">
+            <div style="height: 450px">
+              <quill-editor [modules]="modules" [(ngModel)]="recipe.text"></quill-editor>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-lg-3" style="padding-left: 0px">
+      <mat-card>
+        <mat-card-content>
+          <app-ingredients [recipe]="recipe"></app-ingredients>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12" style="margin-top: 30px;">
+      <button class="float-right" mat-raised-button color="warn" (click)="openDeleteDialog(recipe)">Rezept löschen</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="recipe">
+
+</div>
+
+
+
+

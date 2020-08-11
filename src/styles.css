@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~quill/dist/quill.snow.css';
+@import '~@material/image-list/dist/mdc.image-list.min.css';
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#navbar {
+  background-color: #fffef5;
+  border: 1px solid #e0aa14;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+

@@ -1,0 +1,95 @@
+<div class="container">
+
+
+  <div class="row">
+    <div class="col-12" style="margin-bottom: 20px">
+
+      <mat-card>
+        <mat-card-content>
+          <div class="container">
+            <div class="row">
+              <div class="col-2">
+                <button mat-icon-button  (click)="saveAndExit()"><mat-icon>arrow_back</mat-icon></button>
+              </div>
+              <div class="col-8" style="text-align: center; font-size: x-large">
+                Kapitel bearbeiten
+              </div>
+              <div class="col-2">
+                <button class="float-right" mat-raised-button color="primary" (click)="saveAndExit()">Übernehmen</button>
+              </div>
+            </div>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-9">
+
+      <mat-card>
+
+        <mat-form-field style="width: 100%">
+          <input type="text" placeholder="Titel" matInput [(ngModel)]="chapter.title"
+                 style="font-size: 20pt; margin-bottom: 10px">
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+
+        <app-image-list *ngIf="chapter.options.background === 'IMAGE'" [node]="chapter"
+                        [images]="chapterImages"></app-image-list>
+        <mat-card-content>
+          <div style="height: 500px">
+            <div style="height: 450px">
+              <quill-editor [modules]="modules" [(ngModel)]="chapter.text"></quill-editor>
+            </div>
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+
+
+    </div>
+    <div class="col-3">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Optionen</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <label id="background-label">Hintergrund</label>
+          <mat-radio-group
+            aria-labelledby="background-label"
+            class="radio-group"
+            [(ngModel)]="chapter.options.background">
+            <mat-radio-button value="NONE">kein Hintergrund</mat-radio-button>
+            <mat-radio-button value="IMAGE">Bild</mat-radio-button>
+          </mat-radio-group>
+
+
+          <label id="recipe-background-label">Hintergründe der Rezepte</label>
+          <mat-radio-group
+            aria-labelledby="recipe-background-label"
+            class="radio-group"
+            [(ngModel)]="chapter.options.recipeBackgrounds">
+            <mat-radio-button value="NONE">kein Hintergrund</mat-radio-button>
+            <mat-radio-button value="CHAPTER">Kapitelhintergrund</mat-radio-button>
+            <mat-radio-button value="RECIPE">Rezeptbilder als Hintergründe</mat-radio-button>
+          </mat-radio-group>
+
+          <button style="margin-top: 40px" mat-flat-button color="warn" (click)="openDeleteDialog(chapter)">Kapitel löschen
+          </button>
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </div>
+
+  </div>
+
+</div>
+

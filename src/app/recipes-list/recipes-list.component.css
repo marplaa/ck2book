@@ -1,0 +1,58 @@
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.example-tree-node {
+  display: block;
+}
+
+.example-tree-node .example-tree-node {
+  padding-left: 40px;
+}
+
+.recipes-list-wrapper {
+  margin: 0px 4px;
+  padding-right: 5px;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.right-column {
+  padding: 15px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: #ffffff;;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tree li {
+  margin: 24px 0px 24px 20px;
+
+
+}
+
+.tree li a{
+  color: black;
+}
+.tree ul {
+  border-left: 1px solid lightgray;
+  padding-left: 12px;
+  list-style-type: none
+}
+
+.recipe-title {
+  color: black;
+  padding: 8px;
+  border-radius: 10px;
+  background-color: beige;
+}
+
+

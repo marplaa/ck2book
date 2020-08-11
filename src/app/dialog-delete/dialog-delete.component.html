@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Wirklich löschen?</h2>
+<mat-dialog-content class="mat-typography">
+
+  <p>Möchtest du "{{data.title}}" wirklich löschen?</p>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-flat-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Löschen</button>
+</mat-dialog-actions>
+
