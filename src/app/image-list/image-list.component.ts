@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Recipe, RecipesNode} from '../recipes-node';
-import {chapterImages} from '../chapter-images';
+
 
 
 

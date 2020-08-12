@@ -5,7 +5,7 @@ import {Recipe, RecipesNode} from './recipes-node';
 import {Recipes} from './skeleton';
 import {Md5} from 'ts-md5';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { chapterImages } from './chapter-images';
+import {ChapterImages} from './chapter-images';
 import {twoColTemplate} from './latex-2-column-template';
 import { RenderedBook} from './renderer.service';
 import {catchError} from 'rxjs/operators';
@@ -133,7 +133,7 @@ export class RecipesService {
 
     const newChapter = {
       id: newId,
-      image: chapterImages.cooking[0],
+      image: ChapterImages.getImages()[0],
       title,
       text: 'Lorem ipsum',
       isBottomChapter: false,
