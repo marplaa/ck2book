@@ -1,5 +1,4 @@
 import {Recipe, RecipesNode} from './recipes-node';
-import {chapterImages} from './chapter-images';
 import {standardOptions} from './options';
 
 const recipe: Recipe = {
