@@ -8,7 +8,6 @@ export interface RecipesNode {
   text: string;
   title: string;
   image?: string;
-  images?: string[];
   children?: RecipesNode[];
   isBottomChapter?: boolean;
   options: Options;

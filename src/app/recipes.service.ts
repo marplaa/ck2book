@@ -26,7 +26,7 @@ export class RecipesService {
 
   recipes = Recipes;
   recipe: Recipe;
-  chapter: RecipesNode = {id: '', title: '', children: [], image: '', images: chapterImages.cooking, text: '', options: standardOptions};
+  chapter: RecipesNode = {id: '', title: '', children: [], image: '', text: '', options: standardOptions};
 
   constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private renderer: RendererService) {
     if (this.storage.has('book')) {
@@ -82,7 +82,7 @@ export class RecipesService {
 
   downloadBook(): void {
     const blob = new Blob([JSON.stringify(this.recipes)], {type: 'text/plain;charset=utf-8'});
-    saveAs(blob, "Mein Kochbuch.txt");
+    saveAs(blob, 'Mein Kochbuch.txt');
   }
 
   addRecipe(chapter: RecipesNode, urls: string): void {
@@ -133,7 +133,6 @@ export class RecipesService {
 
     const newChapter = {
       id: newId,
-      images: chapterImages.cooking,
       image: chapterImages.cooking[0],
       title,
       text: 'Lorem ipsum',

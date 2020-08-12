@@ -1,3 +1,17 @@
+export class ChapterImages {
+  static n = 33; // amount of images
+
+
+  static getImages(): string[] {
+    const list: string[] = [];
+    for (let i = 0; i < ChapterImages.n; i++) {
+      list.push('https://marplaa.github.io/ck2book/assets/img/chapter-images/image-' + i + '.jpg');
+    }
+    return list;
+  }
+}
+
+/*
 export const chapterImages = {
   cooking: [
     'https://marplaa.github.io/ck2book/assets/img/chapter-images/cooking_1.jpg',
@@ -37,3 +51,4 @@ export const chapterImages = {
 
   ]
 };
+*/
