@@ -13,7 +13,7 @@ export class ImageListComponent implements OnInit {
 
   @Input() node: RecipesNode;
   @Input() images: string[];
-  page = 1;
+  page = 0;
   displayedImages: string[];
 
 
