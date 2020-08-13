@@ -28,10 +28,8 @@ export class Recipe implements RecipesNode{
     this.title = title;
     this.text = '';
     this.image = 'https://marplaa.github.io/ck2book/assets/img/placeholder.png';
-    this.images = [];
+    this.images = ['https://marplaa.github.io/ck2book/assets/img/placeholder.png'];
     this.ingredients = [];
     this.hasImage = false;
   }
-
-
 }
