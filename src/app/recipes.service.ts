@@ -1,22 +1,20 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {Recipe, RecipesNode} from './recipes-node';
 import {Recipes} from './skeleton';
 import {Md5} from 'ts-md5';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {ChapterImages} from './chapter-images';
-import {twoColTemplate} from './latex-2-column-template';
-import { RenderedBook} from './renderer.service';
-import {catchError} from 'rxjs/operators';
+import {RenderedBook} from './renderer.service';
 import {standardOptions} from './options';
-import { RendererService } from './renderer.service';
-import { saveAs } from 'file-saver';
+import {RendererService} from './renderer.service';
+import {saveAs} from 'file-saver';
+import { environment } from '../environments/environment';
 
-interface CompilationResponse{
+interface CompilationResponse {
   url: string;
 }
-
 
 
 @Injectable({
@@ -40,7 +38,7 @@ export class RecipesService {
   }
 
   getRecipeFromUrl(url: string): Observable<Recipe> {
-    const reqUrl = 'https://ck2book.coretechs.de:8000/get/get_recipe_data_json_get?url=' + url;
+    const reqUrl = environment.ck2bookServer + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
@@ -59,11 +57,11 @@ export class RecipesService {
     return this.getNodeByIdRec(idArray);
   }
 
-  getNodeByIdRec(id: string[]): RecipesNode{
+  getNodeByIdRec(id: string[]): RecipesNode {
     if (id.length === 1) {
       return this.recipes; // chapter.children.find(chptr => chptr.id === id.join('-'));
     }
-    const parentChapter = this.getNodeByIdRec(id.slice(0, id.length - 1 ));
+    const parentChapter = this.getNodeByIdRec(id.slice(0, id.length - 1));
     return parentChapter.children.find(chptr => chptr.id === id.join('-'));
     // return this.getNodeByIdRec(childChapter, id);
 
@@ -115,10 +113,9 @@ export class RecipesService {
     let id = 'x';
     do {
       id = parent.id + '-' + Md5.hashStr(text + id).toString().substr(0, 3);
-    } while (parent.children.find(node => node.id === id ));
+    } while (parent.children.find(node => node.id === id));
     return id;
   }
-
 
 
   /*
@@ -175,7 +172,7 @@ export class RecipesService {
 
     // const renderer = new Renderer();
     const renderedBook = this.renderer.render(this.recipes);
-    this.http.post<CompilationResponse>(url , {content: renderedBook.content, images: renderedBook.images})
+    this.http.post<CompilationResponse>(url, {content: renderedBook.content, images: renderedBook.images})
       .subscribe(data => callback(context, data));
   }
 
