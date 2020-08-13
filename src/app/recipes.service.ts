@@ -147,7 +147,7 @@ export class RecipesService {
       id: newId,
       image: ChapterImages.getImages()[0],
       title,
-      text: 'Lorem ipsum',
+      text: '',
       isBottomChapter: false,
       children: [],
       options: {

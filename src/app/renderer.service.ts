@@ -27,6 +27,7 @@ interface Image {
 export class RendererService {
 
   imageList: Image[] = [];
+  sourcesList = '\n \\newpage \n \\chapter{Quellen}\n  \\begin{tiny} \n';
   recipesService: RecipesService;
 
   constructor() {
@@ -34,10 +35,12 @@ export class RendererService {
 
   render(node: RecipesNode): RenderedBook {
 
-    const content = twoColTemplate.frame.replace('{{content}}', this.renderNode(node));
+    const nodes = this.renderNode(node);
+    const content = twoColTemplate.frame.replace('{{content}}', nodes + this.sourcesList + '\n \\end{tiny} \n');
     const id = '' + Md5.hashStr(content);
     const images = this.imageList;
     this.imageList = [];
+    this.sourcesList = '';
     return {id, content, images};
   }
 
@@ -47,7 +50,6 @@ export class RendererService {
     let renderedItem;
     let output = '';
     for (item of node.children) {
-      console.log(item.title);
 
       if (item.children) { // if chapter
         if (item.isBottomChapter) {
@@ -72,7 +74,7 @@ export class RendererService {
         let sizes;
         if (item.options.recipeBackgrounds === 'CHAPTER') {
           sizes = [{size: twoColTemplate.chapterImageRes, filter: {}},
-            {size: twoColTemplate.chapterImageRes, filter: {color: 0.5, brightness: 3, blur: 15}}] ;
+            {size: twoColTemplate.chapterImageRes, filter: {color: 0.3, brightness: 1.5, blur: 15}}] ;
         } else {
           sizes = [{size: twoColTemplate.chapterImageRes, filter: {}}];
         }
@@ -125,16 +127,28 @@ export class RendererService {
         if (item.hasImage && this.imageList.filter(img => img.url === item.image).length === 0) {
           const img: Image = {
             url: item.image, sizes: [{size: twoColTemplate.recipeImageRes, filter: {}},
-              {size: twoColTemplate.recipeBgImageRes, filter: {color: 0.5, brightness: 3, blur: 15}}]
+              {size: twoColTemplate.recipeBgImageRes, filter: {color: 0.3, brightness: 1.5, blur: 15}}]
           };
           this.imageList.push(img);
         }
         output += renderedItem;
+
+        const chaptersString = this.getChaptersAsString(item);
+        this.sourcesList += chaptersString.substring(3, chaptersString.length) + '\\\\ \n \\textit{' + item.url + '} \\\\ \\\\ \n';
       }
 
     }
+
     return output;
 
+  }
+
+  getChaptersAsString(recipe: RecipesNode): string {
+    if (recipe.id === '000') {
+      return '';
+    } else {
+      return this.getChaptersAsString(this.recipesService.getParentNodeById(recipe.id)) + ' - ' + recipe.title;
+    }
   }
 
   htmlToTex(text: string): string {
