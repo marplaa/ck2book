@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ck2bookServer: 'http://localhost:4200/get/get_recipe_data_json_get?url='
+  ck2bookServer: 'http://localhost:4200'
 };
 
 /*

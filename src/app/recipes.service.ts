@@ -38,7 +38,7 @@ export class RecipesService {
   }
 
   getRecipeFromUrl(url: string): Observable<Recipe> {
-    const reqUrl = environment.ck2bookServer + url;
+    const reqUrl = environment.ck2bookServer + '/get/get_recipe_data_json_get?url=' + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
@@ -168,7 +168,7 @@ export class RecipesService {
   }
 
   requestCompilation(context, callback): void {
-    const url = 'https://ck2book.coretechs.de:8000/compile/toPdf';
+    const url = environment.ck2bookServer + '/compile/toPdf';
 
     // const renderer = new Renderer();
     const renderedBook = this.renderer.render(this.recipes);
