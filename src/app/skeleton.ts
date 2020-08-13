@@ -108,7 +108,7 @@ const recipe: Recipe = {
   ],
   image: 'https://img.chefkoch-cdn.de/rezepte/2455511386627445/bilder/964744/crop-360x240/quinoa-powersalat-mit-tomaten-und-avocado.jpg',
   id: '000-002-f75',
-  options: standardOptions
+  hasImage: true
 };
 
 export const Recipes: RecipesNode =

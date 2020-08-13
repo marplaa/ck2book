@@ -84,14 +84,21 @@ export class RecipesService {
   }
 
   addRecipe(chapter: RecipesNode, urls: string): void {
-    let url = '';
+
     for (let r of urls.split('\n')) {
-      if (r.startsWith('https://www.chefkoch.de/')) {
-        url = r;
+      if (r.startsWith('http')) {
+        if (r.startsWith('https://www.chefkoch.de/')){
+          const url = r;
+          this.scrapeRecipe(chapter, url);
+        } else {
+        }
       } else if (!isNaN(Number(r))) {
-        url = 'https://www.chefkoch.de/rezepte/' + r;
+        const url = 'https://www.chefkoch.de/rezepte/' + r;
+        this.scrapeRecipe(chapter, url);
+      } else if (r.indexOf('.') === -1){
+        // is a new recipe title
+        this.newRecipe(chapter, r);
       }
-      this.scrapeRecipe(chapter, url);
     }
     chapter.isBottomChapter = true;
   }
@@ -100,13 +107,21 @@ export class RecipesService {
     this.getRecipeFromUrl(url)
       .subscribe(recipe => {
           recipe.id = this.generateId(chapter, recipe.title);
+          recipe.hasImage = true;
           this.recipe = recipe;
           chapter.children.push(recipe);
           this.save();
-          // this.makeIngredientsArray(recipe);
-
         }
       );
+  }
+
+  newRecipe(chapter: RecipesNode, title: string): void {
+    const newRecipe = new Recipe(title);
+    newRecipe.id = this.generateId(chapter, title);
+    newRecipe.hasImage = false;
+    chapter.children.push(newRecipe);
+    this.save();
+
   }
 
   generateId(parent: RecipesNode, text: string): string {

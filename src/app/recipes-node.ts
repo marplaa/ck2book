@@ -8,9 +8,10 @@ export interface RecipesNode {
   text: string;
   title: string;
   image?: string;
+  images?: string[];
   children?: RecipesNode[];
   isBottomChapter?: boolean;
-  options: Options;
+  options?: Options;
 }
 
 export class Recipe implements RecipesNode{
@@ -22,9 +23,13 @@ export class Recipe implements RecipesNode{
   recipeInfo: string[][];
   id: string;
   text: string;
-  options: Options;
+  hasImage: boolean;
   constructor(title: string) {
     this.title = title;
+    this.image = 'assets/img/placeholder.png';
+    this.images = [];
+    this.ingredients = [];
+    this.hasImage = false;
   }
 
 

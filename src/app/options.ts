@@ -4,13 +4,18 @@ export const background = {
   RECIPE: 'RECIPE'
 };
 
+
+
 export interface Options {
   recipeBackgrounds: string;
   background: string;
 }
 
+
 export const standardOptions: Options = {
   recipeBackgrounds: 'RECIPE',
   background: 'IMAGE'
-
 };
+
+
+
