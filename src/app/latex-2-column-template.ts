@@ -58,11 +58,10 @@ export const twoColTemplate = {
     '  \\section{{{title}}}\n' +
 
     '\n' +
-    '\n' +
-    '\n' +
-    '  \\begin{center}\n' +
+   /* '  \\begin{center}\n' +
     '    \\includegraphics[width=7.8cm]{{{image}}}\n' +
-    '  \\end{center}\n' +
+    '  \\end{center}\n' +*/
+    '{{image}}' +
 
     '\n' +
     '\n' +

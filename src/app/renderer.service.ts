@@ -101,23 +101,31 @@ export class RendererService {
         renderedItem = twoColTemplate.recipe.replace('{{title}}', item.title);
         renderedItem = renderedItem.replace('{{text}}', this.htmlToTex(item.text));
         renderedItem = renderedItem.replace('{{ingredients}}', this.renderTable(item.ingredients));
-        renderedItem = renderedItem.replace('{{image}}', Md5.hashStr(item.image) + '-' + twoColTemplate.recipeImageRes);
+        if (item.hasImage) {
+          const imageSnippet =  '\\begin{center}\n \\includegraphics[width=7.8cm]{' + item.image + '}\n' + '  \\end{center}\n';
+          renderedItem = renderedItem.replace('{{image}}', Md5.hashStr(imageSnippet) + '-' + twoColTemplate.recipeImageRes);
 
-        const parent = this.recipesService.getParentNodeById(item.id);
-        if (parent.options.recipeBackgrounds === 'RECIPE') {
-          renderedItem = renderedItem.replace('{{bg-image}}',
-            twoColTemplate.background.replace('{{bg-image}}',
-              Md5.hashStr(item.image) + '-' + twoColTemplate.recipeBgImageRes + '-f'));
-        } else if (parent.options.recipeBackgrounds === 'CHAPTER') {
-          renderedItem = renderedItem.replace('{{bg-image}}',
-            twoColTemplate.background.replace('{{bg-image}}',
-              Md5.hashStr(parent.image) + '-' + twoColTemplate.recipeBgImageRes + '-f'));
+          const parent = this.recipesService.getParentNodeById(item.id);
+          if (parent.options.recipeBackgrounds === 'RECIPE') {
+            renderedItem = renderedItem.replace('{{bg-image}}',
+              twoColTemplate.background.replace('{{bg-image}}',
+                Md5.hashStr(item.image) + '-' + twoColTemplate.recipeBgImageRes + '-f'));
+          } else if (parent.options.recipeBackgrounds === 'CHAPTER') {
+            renderedItem = renderedItem.replace('{{bg-image}}',
+              twoColTemplate.background.replace('{{bg-image}}',
+                Md5.hashStr(parent.image) + '-' + twoColTemplate.recipeBgImageRes + '-f'));
+          } else {
+            renderedItem = renderedItem.replace('{{bg-image}}', '');
+          }
         } else {
+          renderedItem = renderedItem.replace('{{image}}', '');
           renderedItem = renderedItem.replace('{{bg-image}}', '');
         }
 
 
-        if (this.imageList.filter(img => img.url === item.image).length === 0) {
+
+
+        if (item.hasImage && this.imageList.filter(img => img.url === item.image).length === 0) {
           const img: Image = {
             url: item.image, sizes: [{size: twoColTemplate.recipeImageRes, filter: {}},
               {size: twoColTemplate.recipeBgImageRes, filter: {color: 0.5, brightness: 3, blur: 15}}]

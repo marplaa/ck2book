@@ -26,7 +26,8 @@ export class Recipe implements RecipesNode{
   hasImage: boolean;
   constructor(title: string) {
     this.title = title;
-    this.image = 'assets/img/placeholder.png';
+    this.text = '';
+    this.image = 'https://marplaa.github.io/ck2book/assets/img/placeholder.png';
     this.images = [];
     this.ingredients = [];
     this.hasImage = false;
