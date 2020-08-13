@@ -153,6 +153,7 @@ export class RendererService {
 
   htmlToTex(text: string): string {
     // replace <strong>
+    text = this.texSave(text);
     let regex = /<\s*strong[^>]*>(.*?)<\s*\/\s*strong>/g;
     let tags = text.match(regex);
     if (tags) {
@@ -190,10 +191,11 @@ export class RendererService {
 
 
     text = text.replace(/<\/br>/g, ' \\\\\n');
+    text = text.replace(/<br>/g, ' \\\\\n');
     text = text.replace(/%/g, '\\%');
 
     // console.log(newTag);
-    return this.texSave(text);
+    return text;
   }
 
 
