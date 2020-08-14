@@ -133,8 +133,10 @@ export class RendererService {
         }
         output += renderedItem;
 
-        const chaptersString = this.getChaptersAsString(item);
-        this.sourcesList += chaptersString.substring(3, chaptersString.length) + '\\\\ \n \\textit{' + item.url + '} \\\\ \\\\ \n';
+        if (item.url !== '') {
+          const chaptersString = this.getChaptersAsString(item);
+          this.sourcesList += chaptersString.substring(3, chaptersString.length) + '\\\\ \n \\textit{' + item.url + '} \\\\ \\\\ \n';
+        }
       }
 
     }
