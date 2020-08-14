@@ -17,6 +17,8 @@ export const twoColTemplate = {
     '\\usepackage{titlesec}\n' +
     '\\usepackage{wallpaper}\n' +
     '\\usepackage[breakable]{tcolorbox}\n' +
+    '\\usepackage{fontspec}\n' +
+    '\\setmainfont{Times New Roman}' +
     '\\graphicspath{{images/}} %Setting the graphicspath\n' +
     '\n' +
     '\\titleformat{\\chapter}[display]\n' +
