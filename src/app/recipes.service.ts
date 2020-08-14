@@ -23,8 +23,13 @@ interface CompilationResponse {
 export class RecipesService {
 
   recipes = Recipes;
+
+  /** selected recipe */
   recipe: Recipe;
+
+  /** selected chapter */
   chapter: RecipesNode = {id: '', title: '', children: [], image: '', text: '', options: standardOptions};
+
 
   constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private renderer: RendererService) {
     if (this.storage.has('book')) {
@@ -37,20 +42,36 @@ export class RecipesService {
     this.renderer.recipesService = this;
   }
 
+  /**
+   * Scrapes a recipe at the given url with the ck2bookServer
+   * @param url
+   */
   getRecipeFromUrl(url: string): Observable<Recipe> {
     const reqUrl = environment.ck2bookServer + '/get/get_recipe_data_json_get?url=' + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
+  /**
+   * Gets recipe by the recipe id
+   * @param id The id of the wanted recipe
+   */
   getRecipeById(id: string): Recipe {
     return this.getNodeById(id) as Recipe;
   }
 
+  /**
+   * Gets the node with id "id"
+   * @param id The id of the wanted node
+   */
   getNodeById(id: string): RecipesNode {
     const idArray = id.split('-');
     return this.getNodeByIdRec(idArray);
   }
 
+  /**
+   * Returns the parent of the node with id "id"
+   * @param id The id of the node the parent is wanted for
+   */
   getParentNodeById(id: string): RecipesNode {
     const idArray = id.split('-');
     idArray.pop();
@@ -63,26 +84,21 @@ export class RecipesService {
     }
     const parentChapter = this.getNodeByIdRec(id.slice(0, id.length - 1));
     return parentChapter.children.find(chptr => chptr.id === id.join('-'));
-    // return this.getNodeByIdRec(childChapter, id);
-
-    /*const path = id.split('-');
-    let currentChapter = (this.recipes)[0];
-
-    let i: number;
-    for (i = 1; i < path.length - 1; i++) {
-      currentChapter = currentChapter.children.find(chapter => chapter.id === path[i]);
-    }
-    currentChapter = currentChapter.children.find(chapter => chapter.id === path[i]);
-
-    // alert(currentChapter["text"]);
-    return currentChapter;*/
   }
 
+  /**
+   * Downloads the current recipes object to the client
+   */
   downloadBook(): void {
     const blob = new Blob([JSON.stringify(this.recipes)], {type: 'text/plain;charset=utf-8'});
     saveAs(blob, 'Mein Kochbuch.txt');
   }
 
+  /**
+   * Parses the list of urls, ids or titles and scrapes them
+   * @param chapter The chapter to add the recipes to
+   * @param urls Single or newline separated list of urls, ids or titles
+   */
   addRecipe(chapter: RecipesNode, urls: string): void {
 
     for (let r of urls.split('\n')) {
@@ -103,6 +119,12 @@ export class RecipesService {
     chapter.isBottomChapter = true;
   }
 
+  /**
+   * Gets the Recipe object with the specified url from the ck2bookServer server
+   *
+   * @param chapter The chapter to add the recipe to
+   * @param url The url of the recipe to scrape
+   */
   scrapeRecipe(chapter: RecipesNode, url: string): void {
     this.getRecipeFromUrl(url)
       .subscribe(recipe => {
@@ -116,6 +138,12 @@ export class RecipesService {
       );
   }
 
+  /**
+   * Adds a new and empty recipe with title "title" under the chapter "chapter"
+   *
+   * @param chapter The chapter to add the new recipe to
+   * @param title The title of the recipe
+   */
   newRecipe(chapter: RecipesNode, title: string): void {
     const newRecipe = new Recipe(title);
     newRecipe.id = this.generateId(chapter, title);
@@ -125,6 +153,11 @@ export class RecipesService {
 
   }
 
+  /**
+   * Generates a unique id for a node
+   * @param parent The parent node of the node the id is for
+   * @param text The text that should be unique in the namespace of the parent
+   */
   generateId(parent: RecipesNode, text: string): string {
     let id = 'x';
     do {
@@ -133,14 +166,11 @@ export class RecipesService {
     return id;
   }
 
-
-  /*
-  * Adds a new chapter to the recipes tree.
-  *
-  * chapter: parent chapter to add the new chapter to
-  *
-  * */
-
+  /**
+   * Adds a new chapter with the given title under the given chapter
+   * @param chapter The chapter to add the new chapter to
+   * @param title The title of the new chapter
+   */
   addChapter(chapter: RecipesNode, title: string): void {
     const newId = this.generateId(chapter, this.chapter.title);
 
@@ -160,15 +190,25 @@ export class RecipesService {
     this.save();
   }
 
+  /**
+   * Saves the current recipes object as json to the local storage
+   */
   save(): void {
     this.storage.set('book', JSON.stringify(this.recipes));
   }
 
+  /**
+   * Reinitializes the recipes object to the defaults
+   */
   delete(): void {
     this.storage.set('book', JSON.stringify(Recipes));
     this.recipes = Recipes;
   }
 
+  /**
+   * Deletes a node from the recipes tree
+   * @param nodeId The id of the node to delete
+   */
   deleteNode(nodeId: string): void {
     const parent = this.getParentNodeById(nodeId);
     parent.children = parent.children.filter(child => child.id !== nodeId);
@@ -178,11 +218,20 @@ export class RecipesService {
     this.save();
   }
 
+  /**
+   * sets the recipes object to the given recipes object (e.g. after loading it from a file)
+   * @param recipes The new recipes object
+   */
   updateRecipes(recipes: RecipesNode): void {
     this.recipes = recipes;
     this.save();
   }
 
+  /**
+   * Start compilation of the recipes object.
+   * @param context Reference to the component that requested the compilation
+   * @param callback Callback function that is called when the compilation is complete
+   */
   requestCompilation(context, callback): void {
     const url = environment.ck2bookServer + '/compile/toPdf';
 
@@ -192,14 +241,14 @@ export class RecipesService {
       .subscribe(data => callback(context, data));
   }
 
-  bookReady(data): void {
+  /*bookReady(data): void {
     console.log(data.url);
-  }
+  }*/
 
-  render(): RenderedBook {
+  /*render(): RenderedBook {
     // const renderer = new Renderer();
     return this.renderer.render(this.recipes);
-  }
+  }*/
 
 
 }

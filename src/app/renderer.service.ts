@@ -104,7 +104,7 @@ export class RendererService {
         renderedItem = renderedItem.replace('{{text}}', this.htmlToTex(item.text));
         renderedItem = renderedItem.replace('{{ingredients}}', this.renderTable(item.ingredients));
         if (item.hasImage) {
-          const imageSnippet = '\\begin{center}\n \\includegraphics[width=7.8cm]{' + Md5.hashStr(item.image) + '-' + twoColTemplate.recipeImageRes + '}\n' + '  \\end{center}\n';
+          const imageSnippet = '\\begin{center}\n \\includegraphics[width=8cm]{' + Md5.hashStr(item.image) + '-' + twoColTemplate.recipeImageRes + '}\n' + '  \\end{center}\n';
           renderedItem = renderedItem.replace('{{image}}', imageSnippet );
 
           const parent = this.recipesService.getParentNodeById(item.id);
@@ -221,7 +221,7 @@ export class RendererService {
 
   renderTable(ingredients: string[]): string {
 
-    let table = '\\begin{tabulary}{7.8cm}{R|L}\n';
+    let table = '\\begin{tabulary}{8cm}{R|L}\n';
     for (const ingredient of ingredients) {
       if ( ingredient.length === 2) {
         table += this.texSave(ingredient[0]) + ' & ' + this.texSave(ingredient[1]) + ' \\\\\n';

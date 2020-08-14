@@ -8,7 +8,7 @@ export const twoColTemplate = {
   frame: '\\documentclass[11pt, a4paper, openany]{book}\n' +
     // '\\usepackage[utf8]{inputenc}\n' +
     '\\usepackage[german]{babel}\n' +
-    '\\usepackage[top=1.5cm, bottom=1.5cm, left=1cm, right=1cm]{geometry}\n' +
+    '\\usepackage[top=1.5cm, bottom=1.5cm, left=0.6cm, right=0.6cm]{geometry}\n' +
     '\\usepackage{multicol}\n' +
     '\\setlength{\\columnsep}{0.6cm}\n' +
     '\\usepackage{tabulary}\n' +
