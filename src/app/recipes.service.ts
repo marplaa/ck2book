@@ -10,7 +10,7 @@ import {RenderedBook} from './renderer.service';
 import {standardOptions} from './options';
 import {RendererService} from './renderer.service';
 import {saveAs} from 'file-saver';
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
 
 interface CompilationResponse {
   url: string;
@@ -87,7 +87,7 @@ export class RecipesService {
 
     for (let r of urls.split('\n')) {
       if (r.startsWith('http')) {
-        if (r.startsWith('https://www.chefkoch.de/')){
+        if (r.startsWith('https://www.chefkoch.de/')) {
           const url = r;
           this.scrapeRecipe(chapter, url);
         } else {
@@ -95,7 +95,7 @@ export class RecipesService {
       } else if (!isNaN(Number(r))) {
         const url = 'https://www.chefkoch.de/rezepte/' + r;
         this.scrapeRecipe(chapter, url);
-      } else if (r.indexOf('.') === -1){
+      } else if (r.indexOf('.') === -1) {
         // is a new recipe title
         this.newRecipe(chapter, r);
       }
@@ -106,6 +106,7 @@ export class RecipesService {
   scrapeRecipe(chapter: RecipesNode, url: string): void {
     this.getRecipeFromUrl(url)
       .subscribe(recipe => {
+          console.log(recipe.recipeInfo);
           recipe.id = this.generateId(chapter, recipe.title);
           recipe.hasImage = true;
           this.recipe = recipe;

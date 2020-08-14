@@ -1,4 +1,6 @@
 
+
+
 export const twoColTemplate = {
   chapterImageRes: '2480x3508',
   recipeImageRes: '900x675',
@@ -18,7 +20,7 @@ export const twoColTemplate = {
     '\\usepackage{wallpaper}\n' +
     '\\usepackage[breakable]{tcolorbox}\n' +
     '\\usepackage{fontspec}\n' +
-    '\\setmainfont{Times New Roman}' +
+    '\\setmainfont{TeX Gyre Termes}' +
     '\\graphicspath{{images/}} %Setting the graphicspath\n' +
     '\n' +
     '\\titleformat{\\chapter}[display]\n' +
