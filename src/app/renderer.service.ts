@@ -189,6 +189,18 @@ export class RendererService {
       }
     }
 
+    // replace <em> = italic
+    regex = /<\s*em[^>]*>(.*?)<\s*\/\s*em>/g;
+    tags = text.match(regex);
+    if (tags) {
+      for (const tag of tags) {
+
+        const newTag = '\\textit{' + tag.replace('<em>', '').replace('</em>', '') + '}';
+
+        text = text.replace(tag, newTag);
+      }
+    }
+
 
     text = text.replace(/<\/br>/g, ' \\\\\n');
     text = text.replace(/<br>/g, ' \\\\\n');
@@ -201,7 +213,7 @@ export class RendererService {
 
   texSave(text: string): string {
     text = text.replace(/%/g, '\\%');
-    text = text.replace(/⅛/g, '1/8');
+    // text = text.replace(/⅛/g, '1/8');
     text = text.replace(/\\/g, '\\\\');
     return text;
   }
