@@ -43,7 +43,7 @@ export class RendererService {
     const id = '' + Md5.hashStr(content + Math.random());
     const images = this.imageList;
     this.imageList = [];
-    this.sourcesList = '';
+    this.sourcesList = '\n \\newpage \n \\chapter{Quellen}\n \\begin{multicols}{2}\n \\begin{tiny} \n';
     return {id, content, images};
   }
 
