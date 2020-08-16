@@ -40,7 +40,7 @@ export class RendererService {
 
     const nodes = this.renderNode(node) + this.sourcesList + '\n \\end{tiny}\n \\end{multicols} \n';
     const content = twoColTemplate.frame.replace('{{content}}', nodes);
-    const id = '' + Md5.hashStr(content);
+    const id = '' + Md5.hashStr(content + Math.random());
     const images = this.imageList;
     this.imageList = [];
     this.sourcesList = '';
