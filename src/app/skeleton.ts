@@ -1,5 +1,4 @@
 import {Recipe, RecipesNode} from './recipes-node';
-import {chapterImages} from './chapter-images';
 import {standardOptions} from './options';
 
 const recipe: Recipe = {
@@ -109,7 +108,7 @@ const recipe: Recipe = {
   ],
   image: 'https://img.chefkoch-cdn.de/rezepte/2455511386627445/bilder/964744/crop-360x240/quinoa-powersalat-mit-tomaten-und-avocado.jpg',
   id: '000-002-f75',
-  options: standardOptions
+  hasImage: true
 };
 
 export const Recipes: RecipesNode =
@@ -124,7 +123,6 @@ export const Recipes: RecipesNode =
       {
         id: '000-001',
         title: 'Kochen',
-        images: chapterImages.cooking,
         image: 'https://marplaa.github.io/ck2bookPage/assets/img/chapter-images/cooking_1.jpg',
         text: '',
         isBottomChapter: false,
@@ -133,7 +131,6 @@ export const Recipes: RecipesNode =
             id: '000-001-001',
             text: '',
             title: 'Suppen',
-            images: chapterImages.cooking,
             image: 'https://marplaa.github.io/ck2bookPage/assets/img/chapter-images/cooking_1.jpg',
             isBottomChapter: false,
             children: [
@@ -145,7 +142,6 @@ export const Recipes: RecipesNode =
             id: '000-001-002',
             text: '',
             title: 'Eintöpfe',
-            images: chapterImages.cooking,
             image: 'https://marplaa.github.io/ck2bookPage/assets/img/chapter-images/cooking_1.jpg',
             isBottomChapter: false,
             children: [
@@ -160,7 +156,6 @@ export const Recipes: RecipesNode =
         id: '000-002',
         title: 'Backen',
         text: '',
-        images: chapterImages.cooking,
         image: 'https://marplaa.github.io/ck2bookPage/assets/img/chapter-images/cooking_1.jpg',
         isBottomChapter: true,
         children: [
@@ -173,7 +168,6 @@ export const Recipes: RecipesNode =
         id: '000-003',
         title: 'Trinken',
         text: '',
-        images: chapterImages.cooking,
         image: 'https://marplaa.github.io/ck2bookPage/assets/img/chapter-images/cooking_1.jpg',
         isBottomChapter: false,
         children: [

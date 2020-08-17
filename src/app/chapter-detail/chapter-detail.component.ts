@@ -6,7 +6,7 @@ import {Location} from '@angular/common';
 import { Router } from '@angular/router';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DialogDeleteComponent} from '../dialog-delete/dialog-delete.component';
-import {chapterImages} from '../chapter-images';
+import {ChapterImages} from '../chapter-images';
 
 
 
@@ -22,7 +22,8 @@ export class ChapterDetailComponent implements OnInit {
   };
   model: string;
   chapter: RecipesNode;
-  chapterImages = chapterImages.cooking;
+  chapterImages = ChapterImages.getImages();
+
 
   constructor(private recipesService: RecipesService,
               private route: ActivatedRoute,
@@ -33,7 +34,7 @@ export class ChapterDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.chapter = this.recipesService.getNodeById(this.route.snapshot.paramMap.get('id'));
-    this.chapterImages.concat(this.chapter.images);
+    // this.chapterImages.concat(this.chapter.images);
   }
 
 

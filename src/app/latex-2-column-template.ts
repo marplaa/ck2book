@@ -1,12 +1,14 @@
 
+
+
 export const twoColTemplate = {
   chapterImageRes: '2480x3508',
   recipeImageRes: '900x675',
   recipeBgImageRes: '2480x3508',
   frame: '\\documentclass[11pt, a4paper, openany]{book}\n' +
-    '\\usepackage[utf8]{inputenc}\n' +
+    // '\\usepackage[utf8]{inputenc}\n' +
     '\\usepackage[german]{babel}\n' +
-    '\\usepackage[top=1.5cm, bottom=1.5cm, left=1cm, right=1cm]{geometry}\n' +
+    '\\usepackage[top=1.5cm, bottom=1.5cm, left=0.6cm, right=0.6cm]{geometry}\n' +
     '\\usepackage{multicol}\n' +
     '\\setlength{\\columnsep}{0.6cm}\n' +
     '\\usepackage{tabulary}\n' +
@@ -17,6 +19,8 @@ export const twoColTemplate = {
     '\\usepackage{titlesec}\n' +
     '\\usepackage{wallpaper}\n' +
     '\\usepackage[breakable]{tcolorbox}\n' +
+    '\\usepackage{fontspec}\n' +
+    '\\setmainfont{TeX Gyre Termes}' +
     '\\graphicspath{{images/}} %Setting the graphicspath\n' +
     '\n' +
     '\\titleformat{\\chapter}[display]\n' +
@@ -58,11 +62,10 @@ export const twoColTemplate = {
     '  \\section{{{title}}}\n' +
 
     '\n' +
-    '\n' +
-    '\n' +
-    '  \\begin{center}\n' +
+   /* '  \\begin{center}\n' +
     '    \\includegraphics[width=7.8cm]{{{image}}}\n' +
-    '  \\end{center}\n' +
+    '  \\end{center}\n' +*/
+    '{{image}}' +
 
     '\n' +
     '\n' +

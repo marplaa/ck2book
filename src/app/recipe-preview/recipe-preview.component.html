@@ -1,5 +1,5 @@
 <h5>{{recipe.title}}</h5>
-<img class="img-thumbnail" src="{{recipe.image}}">
+<img class="img-thumbnail" *ngIf="recipe.hasImage" src="{{recipe.image}}">
 <div style="margin-top: 10px">
   <table width="100%">
     <ng-container *ngFor="let ingredient of recipe.ingredients">

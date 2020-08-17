@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Recipe, RecipesNode} from '../recipes-node';
-import {chapterImages} from '../chapter-images';
+
 
 
 
@@ -13,7 +13,7 @@ export class ImageListComponent implements OnInit {
 
   @Input() node: RecipesNode;
   @Input() images: string[];
-  page = 1;
+  page = 0;
   displayedImages: string[];
 
 

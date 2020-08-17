@@ -1,22 +1,20 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {Recipe, RecipesNode} from './recipes-node';
 import {Recipes} from './skeleton';
 import {Md5} from 'ts-md5';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { chapterImages } from './chapter-images';
-import {twoColTemplate} from './latex-2-column-template';
-import { RenderedBook} from './renderer.service';
-import {catchError} from 'rxjs/operators';
+import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
+import {ChapterImages} from './chapter-images';
+import {RenderedBook} from './renderer.service';
 import {standardOptions} from './options';
-import { RendererService } from './renderer.service';
-import { saveAs } from 'file-saver';
+import {RendererService} from './renderer.service';
+import {saveAs} from 'file-saver';
+import {environment} from '../environments/environment';
 
-interface CompilationResponse{
+interface CompilationResponse {
   url: string;
 }
-
 
 
 @Injectable({
@@ -25,8 +23,13 @@ interface CompilationResponse{
 export class RecipesService {
 
   recipes = Recipes;
+
+  /** selected recipe */
   recipe: Recipe;
-  chapter: RecipesNode = {id: '', title: '', children: [], image: '', images: chapterImages.cooking, text: '', options: standardOptions};
+
+  /** selected chapter */
+  chapter: RecipesNode = {id: '', title: '', children: [], image: '', text: '', options: standardOptions};
+
 
   constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private renderer: RendererService) {
     if (this.storage.has('book')) {
@@ -39,104 +42,143 @@ export class RecipesService {
     this.renderer.recipesService = this;
   }
 
+  /**
+   * Scrapes a recipe at the given url with the ck2bookServer
+   * @param url
+   */
   getRecipeFromUrl(url: string): Observable<Recipe> {
-    const reqUrl = 'https://ck2book.coretechs.de:8000/get/get_recipe_data_json_get?url=' + url;
+    const reqUrl = environment.ck2bookServer + '/get/get_recipe_data_json_get?url=' + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
+  /**
+   * Gets recipe by the recipe id
+   * @param id The id of the wanted recipe
+   */
   getRecipeById(id: string): Recipe {
     return this.getNodeById(id) as Recipe;
   }
 
+  /**
+   * Gets the node with id "id"
+   * @param id The id of the wanted node
+   */
   getNodeById(id: string): RecipesNode {
     const idArray = id.split('-');
     return this.getNodeByIdRec(idArray);
   }
 
+  /**
+   * Returns the parent of the node with id "id"
+   * @param id The id of the node the parent is wanted for
+   */
   getParentNodeById(id: string): RecipesNode {
     const idArray = id.split('-');
     idArray.pop();
     return this.getNodeByIdRec(idArray);
   }
 
-  getNodeByIdRec(id: string[]): RecipesNode{
+  getNodeByIdRec(id: string[]): RecipesNode {
     if (id.length === 1) {
       return this.recipes; // chapter.children.find(chptr => chptr.id === id.join('-'));
     }
-    const parentChapter = this.getNodeByIdRec(id.slice(0, id.length - 1 ));
+    const parentChapter = this.getNodeByIdRec(id.slice(0, id.length - 1));
     return parentChapter.children.find(chptr => chptr.id === id.join('-'));
-    // return this.getNodeByIdRec(childChapter, id);
-
-    /*const path = id.split('-');
-    let currentChapter = (this.recipes)[0];
-
-    let i: number;
-    for (i = 1; i < path.length - 1; i++) {
-      currentChapter = currentChapter.children.find(chapter => chapter.id === path[i]);
-    }
-    currentChapter = currentChapter.children.find(chapter => chapter.id === path[i]);
-
-    // alert(currentChapter["text"]);
-    return currentChapter;*/
   }
 
+  /**
+   * Downloads the current recipes object to the client
+   */
   downloadBook(): void {
     const blob = new Blob([JSON.stringify(this.recipes)], {type: 'text/plain;charset=utf-8'});
-    saveAs(blob, "Mein Kochbuch.txt");
+    saveAs(blob, 'Mein Kochbuch.txt');
   }
 
+  /**
+   * Parses the list of urls, ids or titles and scrapes them
+   * @param chapter The chapter to add the recipes to
+   * @param urls Single or newline separated list of urls, ids or titles
+   */
   addRecipe(chapter: RecipesNode, urls: string): void {
-    let url = '';
+
     for (let r of urls.split('\n')) {
-      if (r.startsWith('https://www.chefkoch.de/')) {
-        url = r;
+      if (r.startsWith('http')) {
+        if (r.startsWith('https://www.chefkoch.de/')) {
+          const url = r;
+          this.scrapeRecipe(chapter, url);
+        } else {
+        }
       } else if (!isNaN(Number(r))) {
-        url = 'https://www.chefkoch.de/rezepte/' + r;
+        const url = 'https://www.chefkoch.de/rezepte/' + r;
+        this.scrapeRecipe(chapter, url);
+      } else if (r.indexOf('.') === -1) {
+        // is a new recipe title
+        this.newRecipe(chapter, r);
       }
-      this.scrapeRecipe(chapter, url);
     }
     chapter.isBottomChapter = true;
   }
 
+  /**
+   * Gets the Recipe object with the specified url from the ck2bookServer server
+   *
+   * @param chapter The chapter to add the recipe to
+   * @param url The url of the recipe to scrape
+   */
   scrapeRecipe(chapter: RecipesNode, url: string): void {
     this.getRecipeFromUrl(url)
       .subscribe(recipe => {
+          console.log(recipe.recipeInfo);
           recipe.id = this.generateId(chapter, recipe.title);
+          recipe.hasImage = true;
           this.recipe = recipe;
           chapter.children.push(recipe);
           this.save();
-          // this.makeIngredientsArray(recipe);
-
         }
       );
   }
 
+  /**
+   * Adds a new and empty recipe with title "title" under the chapter "chapter"
+   *
+   * @param chapter The chapter to add the new recipe to
+   * @param title The title of the recipe
+   */
+  newRecipe(chapter: RecipesNode, title: string): void {
+    const newRecipe = new Recipe(title);
+    newRecipe.id = this.generateId(chapter, title);
+    newRecipe.hasImage = false;
+    chapter.children.push(newRecipe);
+    this.save();
+
+  }
+
+  /**
+   * Generates a unique id for a node
+   * @param parent The parent node of the node the id is for
+   * @param text The text that should be unique in the namespace of the parent
+   */
   generateId(parent: RecipesNode, text: string): string {
     let id = 'x';
     do {
       id = parent.id + '-' + Md5.hashStr(text + id).toString().substr(0, 3);
-    } while (parent.children.find(node => node.id === id ));
+    } while (parent.children.find(node => node.id === id));
     return id;
   }
 
-
-
-  /*
-  * Adds a new chapter to the recipes tree.
-  *
-  * chapter: parent chapter to add the new chapter to
-  *
-  * */
-
+  /**
+   * Adds a new chapter with the given title under the given chapter
+   * @param chapter The chapter to add the new chapter to
+   * @param title The title of the new chapter
+   */
   addChapter(chapter: RecipesNode, title: string): void {
     const newId = this.generateId(chapter, this.chapter.title);
 
     const newChapter = {
       id: newId,
-      images: chapterImages.cooking,
-      image: chapterImages.cooking[0],
+      image: ChapterImages.getImages()[0],
       title,
-      text: 'Lorem ipsum',
+      text: '',
       isBottomChapter: false,
       children: [],
       options: {
@@ -148,15 +190,25 @@ export class RecipesService {
     this.save();
   }
 
+  /**
+   * Saves the current recipes object as json to the local storage
+   */
   save(): void {
     this.storage.set('book', JSON.stringify(this.recipes));
   }
 
+  /**
+   * Reinitializes the recipes object to the defaults
+   */
   delete(): void {
     this.storage.set('book', JSON.stringify(Recipes));
     this.recipes = Recipes;
   }
 
+  /**
+   * Deletes a node from the recipes tree
+   * @param nodeId The id of the node to delete
+   */
   deleteNode(nodeId: string): void {
     const parent = this.getParentNodeById(nodeId);
     parent.children = parent.children.filter(child => child.id !== nodeId);
@@ -166,28 +218,37 @@ export class RecipesService {
     this.save();
   }
 
+  /**
+   * sets the recipes object to the given recipes object (e.g. after loading it from a file)
+   * @param recipes The new recipes object
+   */
   updateRecipes(recipes: RecipesNode): void {
     this.recipes = recipes;
     this.save();
   }
 
+  /**
+   * Start compilation of the recipes object.
+   * @param context Reference to the component that requested the compilation
+   * @param callback Callback function that is called when the compilation is complete
+   */
   requestCompilation(context, callback): void {
-    const url = 'https://ck2book.coretechs.de:8000/compile/toPdf';
+    const url = environment.ck2bookServer + '/compile/toPdf';
 
     // const renderer = new Renderer();
     const renderedBook = this.renderer.render(this.recipes);
-    this.http.post<CompilationResponse>(url , {content: renderedBook.content, images: renderedBook.images})
+    this.http.post<CompilationResponse>(url, {content: renderedBook.content, images: renderedBook.images})
       .subscribe(data => callback(context, data));
   }
 
-  bookReady(data): void {
+  /*bookReady(data): void {
     console.log(data.url);
-  }
+  }*/
 
-  render(): RenderedBook {
+  /*render(): RenderedBook {
     // const renderer = new Renderer();
     return this.renderer.render(this.recipes);
-  }
+  }*/
 
 
 }

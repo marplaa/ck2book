@@ -120,6 +120,9 @@ export class RecipesListComponent implements OnInit {
   }
 
 
+  /**
+   * upload a json formatted recipes object
+   */
   upload(files: FileList): void {
     const fr = new FileReader();
     fr.onload = (e) => {
@@ -132,13 +135,13 @@ export class RecipesListComponent implements OnInit {
     fr.readAsText(files[0]);
   }
 
-  receivedText(e): void {
+  /*receivedText(e): void {
     const lines = e.target.result;
     console.log(JSON.parse(lines));
     console.log('in receivedText');
     this.test = JSON.parse(lines);
     this.recipesService.updateRecipes(JSON.parse(lines));
-  }
+  }*/
 
   isRecipe(node: RecipesNode): boolean {
     return !node.children;
@@ -148,10 +151,9 @@ export class RecipesListComponent implements OnInit {
     return node.isBottomChapter;
   }
 
-  renderHere(): void {
-    // this.renderOutput = this.recipesService.render();
-  }
-
+  /**
+   * Sets loading flag and requests compilation
+   */
   render(): void {
     this.loading = true;
     // const renderedBook = this.recipesService.render();

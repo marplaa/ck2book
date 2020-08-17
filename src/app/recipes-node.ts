@@ -11,7 +11,7 @@ export interface RecipesNode {
   images?: string[];
   children?: RecipesNode[];
   isBottomChapter?: boolean;
-  options: Options;
+  options?: Options;
 }
 
 export class Recipe implements RecipesNode{
@@ -23,10 +23,14 @@ export class Recipe implements RecipesNode{
   recipeInfo: string[][];
   id: string;
   text: string;
-  options: Options;
+  hasImage: boolean;
   constructor(title: string) {
+    this.url = '';
     this.title = title;
+    this.text = '';
+    this.image = 'https://marplaa.github.io/ck2book/assets/img/placeholder.jpg';
+    this.images = ['https://marplaa.github.io/ck2book/assets/img/placeholder.jpg'];
+    this.ingredients = [];
+    this.hasImage = false;
   }
-
-
 }
