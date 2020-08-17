@@ -255,7 +255,12 @@ export class RecipesService {
 
     this.webSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log(data.message);
+      if (data.type === 'message') {
+        console.log(data.data);
+      } else if (data.type === 'book') {
+        console.log(data.data);
+      }
+
     };
     this.webSocket.onclose = (e) => {
       console.error('Chat socket closed unexpectedly');
@@ -265,9 +270,8 @@ export class RecipesService {
   }
 
   sendWebSocketMsg(): void {
-    this.webSocket.send(JSON.stringify({
-      message: 'habubububub'
-    }));
+    const renderedBook = this.renderer.render(this.recipes);
+    this.webSocket.send(JSON.stringify({content: renderedBook.content, images: renderedBook.images}));
   }
 
 
