@@ -6,7 +6,6 @@ import {Recipes} from './skeleton';
 import {Md5} from 'ts-md5';
 import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {ChapterImages} from './chapter-images';
-import {RenderedBook} from './renderer.service';
 import {standardOptions} from './options';
 import {RendererService} from './renderer.service';
 import {saveAs} from 'file-saver';
@@ -29,6 +28,8 @@ export class RecipesService {
 
   /** selected chapter */
   chapter: RecipesNode = {id: '', title: '', children: [], image: '', text: '', options: standardOptions};
+
+  webSocket: WebSocket;
 
 
   constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private renderer: RendererService) {
@@ -97,15 +98,14 @@ export class RecipesService {
   /**
    * Parses the list of urls, ids or titles and scrapes them
    * @param chapter The chapter to add the recipes to
-   * @param urls Single or newline separated list of urls, ids or titles
+   * @param urls Single line or newline separated list of urls, ids or titles
    */
   addRecipe(chapter: RecipesNode, urls: string): void {
 
     for (let r of urls.split('\n')) {
       if (r.startsWith('http')) {
         if (r.startsWith('https://www.chefkoch.de/')) {
-          const url = r;
-          this.scrapeRecipe(chapter, url);
+          this.scrapeRecipe(chapter, r);
         } else {
         }
       } else if (!isNaN(Number(r))) {
@@ -249,6 +249,26 @@ export class RecipesService {
     // const renderer = new Renderer();
     return this.renderer.render(this.recipes);
   }*/
+
+  websocketTest(): void {
+    this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');
+
+    this.webSocket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log(data.message);
+    };
+    this.webSocket.onclose = (e) => {
+      console.error('Chat socket closed unexpectedly');
+    };
+
+
+  }
+
+  sendWebSocketMsg(): void {
+    this.webSocket.send(JSON.stringify({
+      message: 'habubububub'
+    }));
+  }
 
 
 }
