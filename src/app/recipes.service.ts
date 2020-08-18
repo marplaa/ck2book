@@ -7,7 +7,7 @@ import {Md5} from 'ts-md5';
 import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {ChapterImages} from './chapter-images';
 import {standardOptions} from './options';
-import {RendererService} from './renderer.service';
+import {RenderedBook, RendererService} from './renderer.service';
 import {saveAs} from 'file-saver';
 import {environment} from '../environments/environment';
 
@@ -241,14 +241,16 @@ export class RecipesService {
       .subscribe(data => callback(context, data));
   }
 
+
   /*bookReady(data): void {
     console.log(data.url);
   }*/
 
-  /*render(): RenderedBook {
+  render(): RenderedBook {
     // const renderer = new Renderer();
-    return this.renderer.render(this.recipes);
-  }*/
+    const renderedBook = this.renderer.render(this.recipes);
+    return renderedBook;
+  }
 
   websocketTest(): void {
     this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');

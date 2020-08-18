@@ -2,7 +2,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
   <div class="container">
     <a class="navbar-brand" href="#"><img src="assets/icons/chef.svg" width="50px"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -13,17 +14,28 @@
           </a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
             Kochbuch
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.downloadBook()"><mat-icon style="vertical-align: middle">get_app</mat-icon> Herunterladen</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="openUploadModal(uploadModal)"><mat-icon style="vertical-align: middle">folder_open</mat-icon> Öffnen</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.delete()"><mat-icon style="vertical-align: middle">delete</mat-icon> Löschen</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.websocketTest()"> Websocket test</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.sendWebSocketMsg()"> Websocket send</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.downloadBook()">
+              <mat-icon style="vertical-align: middle">get_app</mat-icon>
+              Herunterladen</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="openUploadModal(uploadModal)">
+              <mat-icon style="vertical-align: middle">folder_open</mat-icon>
+              Öffnen</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.delete()">
+              <mat-icon style="vertical-align: middle">delete</mat-icon>
+              Löschen</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.websocketTest()"> Websocket
+              test</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.sendWebSocketMsg()"> Websocket
+              send</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="render()"><mat-icon style="vertical-align: middle">print</mat-icon> Kochbuch erstellen</a>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="render(compileModal)">
+              <mat-icon style="vertical-align: middle">print</mat-icon>
+              Kochbuch erstellen</a>
           </div>
         </li>
         <li class="nav-item">
@@ -41,8 +53,33 @@
 </nav>
 
 
-
 <div class="container" style="background-color: rgba(255,255,255, 0.8);;">
+
+  <div class="row" style="padding: 20px" *ngIf="compiling && !book">
+    <div class="col-2">
+      <mat-progress-spinner style="margin-left: auto; margin-right: auto;" [value]="progress"></mat-progress-spinner>
+    </div>
+    <div class="col-10">
+      <h3>Erstelle dein Buch</h3>
+      <p>Das kann ein paar Minuten dauern</p>
+      <mat-form-field style="width: 100%;">
+      <textarea matInput style="height: 50px;" [(ngModel)]="status">
+      </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" style="padding: 20px" *ngIf="book && !compiling">
+    <div class="col-2">
+      <mat-progress-spinner style="margin-left: auto; margin-right: auto;" [value]="100"></mat-progress-spinner>
+    </div>
+    <div class="col-10">
+      <h3>Dein Buch ist fertig!</h3>
+      <p>Klicke auf den Link um es zu öffnen, oder klicke mit der rechten Maustaste auf den Link und wähle "Ziel speichern unter..." um es zu speichern.</p>
+      <a href="{{book.url}}">Kochbuch.pdf</a>
+    </div>
+  </div>
+
 
 
   <div class="row" style="padding-top: 20px; padding-bottom: 20px">
@@ -53,7 +90,8 @@
         <div class="tree">
           <ul style="border: none">
             <li>Mein Kochbuch
-              <button matTooltip="Ein neues Unterkapitel erstellen" mat-icon-button (click)="openAddChapterDialog('000')">
+              <button matTooltip="Ein neues Unterkapitel erstellen" mat-icon-button
+                      (click)="openAddChapterDialog('000')">
                 <mat-icon>
                   book
                 </mat-icon>
@@ -76,7 +114,7 @@
               -->
               <ng-container *ngIf="isRecipe(node); else isChapter">
                 <!--              <a (click)="selectRecipe(node)">{{node.title}}</a>-->
-                <div >
+                <div>
                   <a class="recipe-title" routerLink="/detail/{{node.id}}"
                      (mouseover)="recipe=recipesService.getRecipeById(node.id)">{{node.title}}</a>
                 </div>
@@ -85,28 +123,27 @@
               <ng-template #isChapter>
 
 
-                <a  routerLink="/chapter/{{node.id}}">{{node.title}}</a>
+                <a routerLink="/chapter/{{node.id}}">{{node.title}}</a>
 
 
                 <ng-container *ngIf="isBottomChapter(node) || node.children.length === 0">
-                    <button mat-icon-button matTooltip="Ein neues Rezept hinzufügen" (click)="openAddRecipeDialog(node.id)">
-                      <mat-icon>
-                        note_add
-                      </mat-icon>
-                    </button>
-                  </ng-container>
+                  <button mat-icon-button matTooltip="Ein neues Rezept hinzufügen"
+                          (click)="openAddRecipeDialog(node.id)">
+                    <mat-icon>
+                      note_add
+                    </mat-icon>
+                  </button>
+                </ng-container>
 
-                  <ng-container *ngIf="!isBottomChapter(node)">
-                    <button mat-icon-button matTooltip="Ein neues Unterkapitel erstellen" (click)="openAddChapterDialog(node.id)">
-                      <mat-icon>
-                        book
-                      </mat-icon>
-                    </button>
+                <ng-container *ngIf="!isBottomChapter(node)">
+                  <button mat-icon-button matTooltip="Ein neues Unterkapitel erstellen"
+                          (click)="openAddChapterDialog(node.id)">
+                    <mat-icon>
+                      book
+                    </mat-icon>
+                  </button>
 
-                  </ng-container>
-
-
-
+                </ng-container>
 
 
                 <ul *ngIf="hasChild(node)">
@@ -125,28 +162,28 @@
     </div>
 
     <div class="col-4">
-      <div *ngIf="loading" class="right-column">
-        <h2>Erstelle Buch...</h2>
-        <mat-spinner style="margin-left: auto; margin-right: auto"></mat-spinner>
-        <br>
-        <p>
-          Erstelle dein Buch. Das kann einige Minuten dauern...
-        </p>
-
+      <div class="sticky-top right-column" *ngIf="recipe">
+        <app-recipe-preview [recipe]="recipe"></app-recipe-preview>
       </div>
-      <div class="sticky-top right-column" *ngIf="recipe && !loading">
-        <app-recipe-preview  [recipe]="recipe"></app-recipe-preview>
-      </div>
-      <div *ngIf="!loading && !recipe">
+      <div *ngIf="!recipe">
 
         <h3>Erstelle dein Kochbuch!</h3>
         <br>
-        <p>Um dein Kochbuch zu erstellen und hinterher zu einem Fotobuch drucken lassen zu können, kannst du <mat-icon style="vertical-align: middle">book</mat-icon>Kapitel erstellen
-          und <mat-icon style="vertical-align: middle">note_add</mat-icon>Rezepte zu diesen hinzufügen.</p>
+        <p>Um dein Kochbuch zu erstellen und hinterher zu einem Fotobuch drucken lassen zu können, kannst du
+          <mat-icon style="vertical-align: middle">book</mat-icon>
+          Kapitel erstellen
+          und
+          <mat-icon style="vertical-align: middle">note_add</mat-icon>
+          Rezepte zu diesen hinzufügen.
+        </p>
         <p>Wenn du auf einen Kapitelnamen klickst, kannst du das Kapitel bearbeiten oder löschen.</p>
-        <p>Um eine Vorschau von einem Rezept zu sehen, gehe mit der Maus über den Namen des Rezepts. Um das Rezept zu bearbeiten oder zu löschen, klicke auf den Namen des Rezepts.</p>
-        <p>Wenn du alle deine Rezepte hinzugefügt hast, gehe oben auf "Kochbuch" - "Kochbuch erstellen". Je nach dem wie viele Rezepte du gesammelt hast, kann dies einige Minuten dauern.
-          <br>Wenn dein Buch fertig ist, öffnet sich ein Popup mit einem Link zu deinem Buch. Entweder klicke darauf um es direkt zu öffnen, oder klicke mit der rechten Maustaste darauf und dann auf "Ziel speichern unter..." um es zu speichern.</p>
+        <p>Um eine Vorschau von einem Rezept zu sehen, gehe mit der Maus über den Namen des Rezepts. Um das Rezept zu
+          bearbeiten oder zu löschen, klicke auf den Namen des Rezepts.</p>
+        <p>Wenn du alle deine Rezepte hinzugefügt hast, gehe oben auf "Kochbuch" - "Kochbuch erstellen". Je nach dem wie
+          viele Rezepte du gesammelt hast, kann dies einige Minuten dauern.
+          <br>Wenn dein Buch fertig ist, öffnet sich ein Popup mit einem Link zu deinem Buch. Entweder klicke darauf um
+          es direkt zu öffnen, oder klicke mit der rechten Maustaste darauf und dann auf "Ziel speichern unter..." um es
+          zu speichern.</p>
         <p></p>
       </div>
     </div>
@@ -168,6 +205,33 @@
         <input type="file" class="form-control-file" id="fileInput" (change)="upload($event.target.files)">
       </div>
     </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Fertig</button>
+  </div>
+</ng-template>
+
+<ng-template #compileModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-compile-title">Kochbuch öffnen</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="width: 800px">
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div class="col-8">
+          <div style="height: 100px; width: 500px; background-color: lightgoldenrodyellow; padding: 10px">
+            {{status}}
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Fertig</button>
