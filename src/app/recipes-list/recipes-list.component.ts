@@ -156,12 +156,8 @@ export class RecipesListComponent implements OnInit {
   /**
    * Sets loading flag and requests compilation
    */
-  render(modal): void {
+  render(): void {
     this.compiling = true;
-    /*this.modalService.open(modal, {ariaLabelledBy: 'modal-compile-title'}).result.then((result) => {
-      console.log('Closed with: ${result}');
-    }, (reason) => {
-    });*/
 
     const renderedBook = this.recipesService.render();
     this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');

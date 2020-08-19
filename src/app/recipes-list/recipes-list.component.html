@@ -28,12 +28,9 @@
             <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.delete()">
               <mat-icon style="vertical-align: middle">delete</mat-icon>
               Löschen</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.websocketTest()"> Websocket
-              test</a>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="recipesService.sendWebSocketMsg()"> Websocket
-              send</a>
+
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0);" (click)="render(compileModal)">
+            <a class="dropdown-item" href="javascript:void(0);" (click)="render()">
               <mat-icon style="vertical-align: middle">print</mat-icon>
               Kochbuch erstellen</a>
           </div>
@@ -55,17 +52,17 @@
 
 <div class="container" style="background-color: rgba(255,255,255, 0.8);;">
 
-  <div class="row" style="padding: 20px" *ngIf="compiling && !book">
+  <div class="row" style="padding: 20px" *ngIf="compiling">
     <div class="col-2">
       <mat-progress-spinner style="margin-left: auto; margin-right: auto;" [value]="progress"></mat-progress-spinner>
     </div>
     <div class="col-10">
       <h3>Erstelle dein Buch</h3>
       <p>Das kann ein paar Minuten dauern</p>
-      <mat-form-field style="width: 100%;">
-      <textarea matInput style="height: 50px;" [(ngModel)]="status">
-      </textarea>
-      </mat-form-field>
+      <div style="height: 50px">
+        {{status}}
+      </div>
+
     </div>
   </div>
 
@@ -211,7 +208,7 @@
   </div>
 </ng-template>
 
-<ng-template #compileModal let-modal>
+<!--<ng-template #compileModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-compile-title">Kochbuch öffnen</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -236,52 +233,4 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Fertig</button>
   </div>
-</ng-template>
-
-<!--<ng-template #newChapterModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Neues Kapitel unter "{{chapter.title}}" erstellen</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label for="newChapterTitle">Neues Kapitel</label>
-        <div class="input-group">
-          <input class="form-control" id="newChapterTitle" type="text" placeholder="Titel des neuen Kapitels"
-                 name="newChapterName" [(ngModel)]="newChapterTitle" style="margin-bottom: 10px">
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('s')">Save</button>
-  </div>
-</ng-template>
-
-<ng-template #newRecipeModal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="nr-title">Neues Rezept unter "{{chapter.title}}" hinzufügen</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label for="newChapterTitle">Neues Rezept</label>
-        <div class="input-group">
-          <textarea class="form-control" id="newRecipeUrl" type="text" placeholder="https://www.example.com"
-                    name="newRecipeUrl" [(ngModel)]="newRecipeUrl" style="margin-bottom: 10px"></textarea>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('s')">Save</button>
-  </div>
 </ng-template>-->
-
-

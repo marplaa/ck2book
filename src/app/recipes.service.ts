@@ -45,10 +45,10 @@ export class RecipesService {
 
   /**
    * Scrapes a recipe at the given url with the ck2bookServer
-   * @param url
+   * @param url The recipe url
    */
   getRecipeFromUrl(url: string): Observable<Recipe> {
-    const reqUrl = environment.ck2bookServer + '/get/get_recipe_data_json_get?url=' + url;
+    const reqUrl = environment.ck2bookServer + '/get/scrape_recipe?url=' + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
@@ -252,7 +252,7 @@ export class RecipesService {
     return renderedBook;
   }
 
-  websocketTest(): void {
+/*  websocketTest(): void {
     this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');
 
     this.webSocket.onmessage = (e) => {
@@ -274,7 +274,7 @@ export class RecipesService {
   sendWebSocketMsg(): void {
     const renderedBook = this.renderer.render(this.recipes);
     this.webSocket.send(JSON.stringify({content: renderedBook.content, images: renderedBook.images}));
-  }
+  }*/
 
 
 }
