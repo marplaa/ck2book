@@ -6,9 +6,8 @@ import {Recipes} from './skeleton';
 import {Md5} from 'ts-md5';
 import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {ChapterImages} from './chapter-images';
-import {RenderedBook} from './renderer.service';
 import {standardOptions} from './options';
-import {RendererService} from './renderer.service';
+import {RenderedBook, RendererService} from './renderer.service';
 import {saveAs} from 'file-saver';
 import {environment} from '../environments/environment';
 
@@ -30,6 +29,8 @@ export class RecipesService {
   /** selected chapter */
   chapter: RecipesNode = {id: '', title: '', children: [], image: '', text: '', options: standardOptions};
 
+  webSocket: WebSocket;
+
 
   constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private renderer: RendererService) {
     if (this.storage.has('book')) {
@@ -44,10 +45,10 @@ export class RecipesService {
 
   /**
    * Scrapes a recipe at the given url with the ck2bookServer
-   * @param url
+   * @param url The recipe url
    */
   getRecipeFromUrl(url: string): Observable<Recipe> {
-    const reqUrl = environment.ck2bookServer + '/get/get_recipe_data_json_get?url=' + url;
+    const reqUrl = environment.ck2bookServer + '/get/scrape_recipe?url=' + url;
     return this.http.get<Recipe>(reqUrl);
   }
 
@@ -97,15 +98,14 @@ export class RecipesService {
   /**
    * Parses the list of urls, ids or titles and scrapes them
    * @param chapter The chapter to add the recipes to
-   * @param urls Single or newline separated list of urls, ids or titles
+   * @param urls Single line or newline separated list of urls, ids or titles
    */
   addRecipe(chapter: RecipesNode, urls: string): void {
 
     for (let r of urls.split('\n')) {
       if (r.startsWith('http')) {
         if (r.startsWith('https://www.chefkoch.de/')) {
-          const url = r;
-          this.scrapeRecipe(chapter, url);
+          this.scrapeRecipe(chapter, r);
         } else {
         }
       } else if (!isNaN(Number(r))) {
@@ -241,13 +241,39 @@ export class RecipesService {
       .subscribe(data => callback(context, data));
   }
 
+
   /*bookReady(data): void {
     console.log(data.url);
   }*/
 
-  /*render(): RenderedBook {
+  render(): RenderedBook {
     // const renderer = new Renderer();
-    return this.renderer.render(this.recipes);
+    const renderedBook = this.renderer.render(this.recipes);
+    return renderedBook;
+  }
+
+/*  websocketTest(): void {
+    this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');
+
+    this.webSocket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'message') {
+        console.log(data.data);
+      } else if (data.type === 'book') {
+        console.log(data.data);
+      }
+
+    };
+    this.webSocket.onclose = (e) => {
+      console.error('Chat socket closed unexpectedly');
+    };
+
+
+  }
+
+  sendWebSocketMsg(): void {
+    const renderedBook = this.renderer.render(this.recipes);
+    this.webSocket.send(JSON.stringify({content: renderedBook.content, images: renderedBook.images}));
   }*/
 
 

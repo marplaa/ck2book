@@ -1,17 +1,18 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {Recipe, RecipesNode} from '../recipes-node';
 import {Recipes} from '../skeleton';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {ArrayDataSource} from '@angular/cdk/collections';
-import { RecipesService } from '../recipes.service';
+import {RecipesService} from '../recipes.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { Md5 } from 'ts-md5';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {Md5} from 'ts-md5';
+import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogDeleteComponent} from '../dialog-delete/dialog-delete.component';
 import {DialogAddRecipeComponent} from '../dialog-add-recipe/dialog-add-recipe.component';
 import {DialogAddChapterComponent} from '../dialog-add-chapter/dialog-add-chapter.component';
 import {DialogDownloadBookComponent} from '../dialog-download-book/dialog-download-book.component';
+import {environment} from '../../environments/environment';
 
 
 @Component({
@@ -24,18 +25,21 @@ export class RecipesListComponent implements OnInit {
   // recipes: RecipesNode;
   recipe: Recipe;
   chapter: RecipesNode;
-  loading = false;
+  compiling = false;
+  status = '';
+  progress = 0;
+  book = null;
+  webSocket: WebSocket;
 
   renderOutput: string;
 
   newChapterTitle = '';
-  newRecipeUrl: '';
-  private test: any;
 
 
   constructor(public recipesService: RecipesService,
               private modalService: NgbModal,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -45,10 +49,9 @@ export class RecipesListComponent implements OnInit {
 
   hasChild = (node: RecipesNode) => !!node.children && node.children.length > 0;
 
-  selectRecipe(recipe: Recipe): void  {
+  selectRecipe(recipe: Recipe): void {
     this.recipe = recipe;
   }
-
 
 
   showChapter(chapterID: string): void {
@@ -57,20 +60,19 @@ export class RecipesListComponent implements OnInit {
   }
 
 
+  /*  openNewChapterModal(content, chapter: string): void {
+      this.chapter = this.recipesService.getNodeById(chapter);
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        if (result === 's') {this.recipesService.addChapter(this.chapter, this.newChapterTitle); this.newChapterTitle = ''; }
+      });
+    }
 
-/*  openNewChapterModal(content, chapter: string): void {
-    this.chapter = this.recipesService.getNodeById(chapter);
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      if (result === 's') {this.recipesService.addChapter(this.chapter, this.newChapterTitle); this.newChapterTitle = ''; }
-    });
-  }
-
-  openNewRecipeModal(content, chapter: string): void {
-    this.chapter = this.recipesService.getNodeById(chapter);
-    this.modalService.open(content, {ariaLabelledBy: 'nr-title'}).result.then((result) => {
-      if (result === 's') {this.recipesService.addRecipe(this.chapter, this.newRecipeUrl); this.newRecipeUrl = ''; }
-    });
-  }*/
+    openNewRecipeModal(content, chapter: string): void {
+      this.chapter = this.recipesService.getNodeById(chapter);
+      this.modalService.open(content, {ariaLabelledBy: 'nr-title'}).result.then((result) => {
+        if (result === 's') {this.recipesService.addRecipe(this.chapter, this.newRecipeUrl); this.newRecipeUrl = ''; }
+      });
+    }*/
 
   openAddRecipeDialog(chapter: string): void {
     this.chapter = this.recipesService.getNodeById(chapter);
@@ -155,9 +157,34 @@ export class RecipesListComponent implements OnInit {
    * Sets loading flag and requests compilation
    */
   render(): void {
-    this.loading = true;
-    // const renderedBook = this.recipesService.render();
-    this.recipesService.requestCompilation(this, this.openDownloadBookDialog);
+    this.compiling = true;
+
+    const renderedBook = this.recipesService.render();
+    this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');
+
+    this.webSocket.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.type === 'message') {
+        this.status = msg.data;
+        this.progress = msg.progress;
+        console.log(msg.data);
+        console.log(msg.progress);
+      } else if (msg.type === 'book') {
+        console.log(msg.data);
+        this.book = msg.data;
+        this.compiling = false;
+      }
+    };
+
+    this.webSocket.onclose = (e) => {
+      console.error('Chat socket closed unexpectedly');
+    };
+    this.webSocket.onopen = (e) => this.webSocket.send(JSON.stringify({content: renderedBook.content, images: renderedBook.images}));
+
+
+  }
+
+  onMessage(e): void {
 
   }
 
