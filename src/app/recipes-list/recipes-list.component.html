@@ -52,7 +52,7 @@
 
 <div class="container" style="background-color: rgba(255,255,255, 0.8);;">
 
-  <div class="row" style="padding: 20px" *ngIf="compiling">
+  <div class="row" style="padding: 20px; height: 160px" [@compileAnimation] *ngIf="compiling">
     <div class="col-2">
       <mat-progress-spinner style="margin-left: auto; margin-right: auto;" [value]="progress"></mat-progress-spinner>
     </div>
@@ -66,7 +66,7 @@
     </div>
   </div>
 
-  <div class="row" style="padding: 20px" *ngIf="book && !compiling">
+  <div class="row" style="padding: 20px" *ngIf="book && !compiling" [@bookAnimation]>
     <div class="col-2">
       <mat-progress-spinner style="margin-left: auto; margin-right: auto;" [value]="100"></mat-progress-spinner>
     </div>
