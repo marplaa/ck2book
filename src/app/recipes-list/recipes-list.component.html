@@ -8,11 +8,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
@@ -36,13 +31,10 @@
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="#">Hilfe</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
+          <a class="nav-link" href="#">Kontakt</a>
         </li>
       </ul>
     </div>
@@ -50,7 +42,7 @@
 </nav>
 
 
-<div class="container" style="background-color: rgba(255,255,255, 0.8);;">
+<div class="container" style="background-color: rgba(255,255,255, 0.8);">
 
   <div class="row" style="padding: 20px; height: 160px" [@compileAnimation] *ngIf="compiling">
     <div class="col-2">
@@ -73,7 +65,7 @@
     <div class="col-10">
       <h3>Dein Buch ist fertig!</h3>
       <p>Klicke auf den Link um es zu öffnen, oder klicke mit der rechten Maustaste auf den Link und wähle "Ziel speichern unter..." um es zu speichern.</p>
-      <a href="{{book.url}}">Kochbuch.pdf</a>
+      <a id="book-link" href="{{book.url}}">Kochbuch.pdf</a>
     </div>
   </div>
 

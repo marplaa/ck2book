@@ -28,7 +28,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
           ':enter',
           [
             style({ height: 0, opacity: 0 }),
-            animate('1s ease-out',
+            animate('0.5s ease-out',
               style({ height: 160, opacity: 1 }))
           ]
         ),
