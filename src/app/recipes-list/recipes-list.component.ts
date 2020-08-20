@@ -191,7 +191,7 @@ export class RecipesListComponent implements OnInit {
     this.compiling = true;
 
     const renderedBook = this.recipesService.render();
-    this.webSocket = new WebSocket('ws://' + environment.websocketServer + '/ws/');
+    this.webSocket = new WebSocket(environment.websocketServer + '/ws/');
 
     this.webSocket.onmessage = (e) => {
       const msg = JSON.parse(e.data);
