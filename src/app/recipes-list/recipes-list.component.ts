@@ -13,12 +13,43 @@ import {DialogAddRecipeComponent} from '../dialog-add-recipe/dialog-add-recipe.c
 import {DialogAddChapterComponent} from '../dialog-add-chapter/dialog-add-chapter.component';
 import {DialogDownloadBookComponent} from '../dialog-download-book/dialog-download-book.component';
 import {environment} from '../../environments/environment';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 
 @Component({
   selector: 'app-recipes-list',
   templateUrl: './recipes-list.component.html',
-  styleUrls: ['./recipes-list.component.css']
+  styleUrls: ['./recipes-list.component.css'],
+  animations: [
+    trigger(
+      'compileAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ height: 0, opacity: 0 }),
+            animate('0.5s ease-out',
+              style({ height: 160, opacity: 1 }))
+          ]
+        ),
+      ]
+    ),
+    trigger(
+      'bookAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ 'background-color': 'transparent' }),
+            animate('1s ease-out',
+              style({ 'background-color': 'lightgreen' })),
+            animate('1s ease-out',
+              style({ 'background-color': 'transparent' }))
+          ]
+        ),
+      ]
+    )
+  ],
 })
 export class RecipesListComponent implements OnInit {
 
