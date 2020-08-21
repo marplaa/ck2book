@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  ck2bookServer: 'http://localhost:4200'
+  ck2bookServer: 'http://localhost:4200',
+  websocketServer: 'ws://localhost:8000'
 };
 
 /*
