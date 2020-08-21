@@ -210,7 +210,8 @@ export class RecipesListComponent implements OnInit {
     this.webSocket.onclose = (e) => {
       console.error('Chat socket closed unexpectedly');
     };
-    this.webSocket.onopen = (e) => this.webSocket.send(JSON.stringify({content: renderedBook.content, images: renderedBook.images}));
+    this.webSocket.onopen = (e) => this.webSocket.send(
+      JSON.stringify({id: renderedBook.id, content: renderedBook.content, images: renderedBook.images}));
 
 
   }
