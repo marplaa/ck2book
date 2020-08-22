@@ -1,14 +1,8 @@
 import {ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {Recipe, RecipesNode} from '../recipes-node';
-import {Recipes} from '../skeleton';
-import {NestedTreeControl} from '@angular/cdk/tree';
-import {ArrayDataSource} from '@angular/cdk/collections';
 import {RecipesService} from '../recipes.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {Md5} from 'ts-md5';
-import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogDeleteComponent} from '../dialog-delete/dialog-delete.component';
 import {DialogAddRecipeComponent} from '../dialog-add-recipe/dialog-add-recipe.component';
 import {DialogAddChapterComponent} from '../dialog-add-chapter/dialog-add-chapter.component';
 import {DialogDownloadBookComponent} from '../dialog-download-book/dialog-download-book.component';
