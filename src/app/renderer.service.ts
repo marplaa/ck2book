@@ -247,6 +247,10 @@ export class RendererService {
     text = text.replace(/\\/g, '\\textbackslash ');
     text = text.replace(/\{/g, '\\{');
     text = text.replace(/\}/g, '\\}');
+    text = text.replace(/&lt;/g, '\\textless');
+    text = text.replace(/&gt;/g, '\\textgreater');
+    text = text.replace(/&amp;/g, '\\&');
+    // TODO single ampersand
 
     return text;
   }
