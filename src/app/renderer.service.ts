@@ -243,8 +243,8 @@ export class RendererService {
    */
   texSave(text: string): string {
     text = text.replace(/%/g, '\\%');
-    // text = text.replace(/⅛/g, '1/8');
-    text = text.replace(/\\/g, '\\\\');
+    text = text.replace(/⅛/g, '1/8');
+    text = text.replace(/\\/g, '\\textbackslash');
     text = text.replace(/\{/g, '\\{');
     text = text.replace(/\}/g, '\\}');
 
