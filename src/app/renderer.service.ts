@@ -245,6 +245,11 @@ export class RendererService {
     text = text.replace(/%/g, '\\%');
     // text = text.replace(/⅛/g, '1/8');
     text = text.replace(/\\/g, '\\\\');
+    text = text.replace(/\{/g, '\\{');
+    text = text.replace(/\}/g, '\\}');
+    text = text.replace(/\(/g, '\\(');
+    text = text.replace(/\)/g, '\\)');
+
     return text;
   }
 
