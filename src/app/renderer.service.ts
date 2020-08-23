@@ -62,9 +62,9 @@ export class RendererService {
 
         // TITLE
         if (item.isBottomChapter) { // if item is a bottom chapter use the chapter template without the multicols
-          renderedItem = twoColTemplate.chapter.replace('{{title}}', item.title);
+          renderedItem = twoColTemplate.chapter.replace('{{title}}', this.texSave(item.title));
         } else {
-          renderedItem = twoColTemplate.chapter_w_subchapters.replace('{{title}}', item.title);
+          renderedItem = twoColTemplate.chapter_w_subchapters.replace('{{title}}', this.texSave(item.title));
         }
 
         // TEXT
@@ -115,7 +115,7 @@ export class RendererService {
 
       } else {
         // item is a recipe
-        renderedItem = twoColTemplate.recipe.replace('{{title}}', item.title);
+        renderedItem = twoColTemplate.recipe.replace('{{title}}', this.texSave(item.title));
         renderedItem = renderedItem.replace('{{text}}', this.htmlToTex(item.text));
         renderedItem = renderedItem.replace('{{ingredients}}', this.renderTable(item.ingredients));
 
@@ -172,7 +172,7 @@ export class RendererService {
     if (recipe.id === '000') {
       return '';
     } else {
-      return this.getChaptersAsString(this.recipesService.getParentNodeById(recipe.id)) + ' - ' + recipe.title;
+      return this.getChaptersAsString(this.recipesService.getParentNodeById(this.texSave(recipe.id))) + ' - ' + this.texSave(recipe.title);
     }
   }
 
