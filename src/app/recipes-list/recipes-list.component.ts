@@ -196,8 +196,12 @@ export class RecipesListComponent implements OnInit {
         console.log(msg.progress);
       } else if (msg.type === 'book') {
         console.log(msg.data);
-        this.book = msg.data;
-        this.compiling = false;
+        if (msg.data.ok) {
+          this.book = msg.data;
+          this.compiling = false;
+        } else {
+          this.status = 'Es ist ein Fehler aufgetreten...';
+        }
       }
     };
 
